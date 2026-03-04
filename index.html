@@ -4,14 +4,14 @@
 <div class="login">
             <h1>Login</h1>
             <div class="links">
-                <a href="{{url_for('login') }}" class="active">Login</a>
-                <a href="#">Register</a>
+                <a href="{{url_for('auth.login') }}" class="active">Login</a>
+                <a href="{{url_for('auth.register') }}">Register</a>
             </div>
-            <form action="{{url_for('login') }}" method="post">
+            <form action="{{url_for('auth.login') }}" method="post">
                 <label for="username">
                     <i class="fas fa-user"></i>
                 </label>
-                <input type="test" name="username" placeholder="Username" id="username" required>
+                <input type="text" name="username" placeholder="Username" id="username" required>
                 <label for="password">
                     <i class="fas fa-lock"></i>
                 </label>
