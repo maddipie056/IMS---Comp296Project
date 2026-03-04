@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Profile</title>
+        <link rel="stylesheet" href="{{url_for('static', filename=style.css)}}">
+    </head>
+    <body>
+        <div class="ProfilePage">
+            <h1>Profile</h1>
+            <p><strong>Username:</strong>{{user.username}}</p>
+            <p><strong>Role:</strong>{{user.role}}</p>
+            <p><strong>Staff ID:</strong>{{user.staff_id}}</p>
+
+            <a class="button" href="{{url_for('auth.home')}}">Back to Home</a>
+            <a class="button logout" href="{{url_for('auth.logout')}}">Logout</a>
+        </div>
+    </body>
+</html>

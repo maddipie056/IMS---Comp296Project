@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <link rel="stylesheet" href="{{url_for('static', filename=style.css)}}">
+    </head>
+    <body>
+        <div class="Loggedin">
+            <h1>Welcome, {{username}}!</h1>
+            <p>You are now logged in</p>
+            <a class="button" href="{{url_for('auth.profile')}}">ViewProfile</a>
+            <a class="button logout" href="{{url_for('auth.logout')}}">Logout</a>
+        </div>
+    </body>
+</html>
