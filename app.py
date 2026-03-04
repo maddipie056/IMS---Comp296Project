@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 import os
@@ -34,9 +34,14 @@ def create_app():
     api.add_resource(StockAdjustment,'/api/adjustments/<int:adjustment_id>')
 
 
-    
+    @app.route('/login')
+    def index():
+        return redirect(url_for('auth.login'))
+
     @app.route('/')
     def home():
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.home'))
+
+
 
     return app
