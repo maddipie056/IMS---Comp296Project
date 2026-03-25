@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Accounts</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='admdashboard.css')}}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <h2>Admin</h2>
+            </div>
+            <nav class = "menu">
+                <a href="{{url_for('admin.dashboard')}}">Dashboard</a>
+                <a href="{{url_for('admin.view_accounts')}}" class="active">Accounts</a>
+                <a href="{{url_for('admin.roles')}}">Role Management</a>
+            </nav>
+
+            <div class="logout-section">
+                <p class="username">{{username}}</p>
+                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+        <main class="main-content">
+            <h2>All Accounts</h2>
+
+            <div class="controls_row">
+                <form method="GET" class="search-form">
+                    <input type="text" name="search" placeholder="Search by username or name" value="{{ request.args.get('search', '') }}">
+                    <button type="submit" class="primary-button">Search</button>
+                </form>
+                <form method="GET" class="filter-form">
+                    <select name="role" onchange="this.form.submit()">
+                        <option value="">Filter by Role</option>
+                        <option value="employee" {% if request.args.get('role') == 'employee' %}selected{% endif %}>Employee</option>
+                        <option value="manager" {% if request.args.get('role') == 'manager' %}selected{% endif %}>Manager</option>
+                        <option value="admin" {% if request.args.get('role') == 'admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </form>
+                <a href="{{url_for('admin.create_account')}}" class="createacc-button">Create Account</a>
+
+            </div>
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>{{ user.status }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_account', user_id=user.id) }}" class="action-link">Edit</a>
+                            <a href="{{ url_for('admin.deactivate_account', user_id=user.id) }}" class="action-link">Deactivate</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </div>
+<body>
+</html>
