@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Account</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='admindashboard.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='admdashboard.css')}}">
 </head>
 <body>
     <div class="dashboard-container">
@@ -14,8 +14,7 @@
             </div>
             <nav class = "menu">
                 <a href="{{url_for('admin.dashboard')}}">Dashboard</a>
-                <a href="{{url_for('admin.accounts')}}">Accounts</a>
-                <a href="{{url_for('admin.create_account')}}" class="active">Create Account</a>
+                <a href="{{url_for('admin.view_accounts')}}">Accounts</a>
                 <a href="{{url_for('admin.roles')}}">Role Management</a>
             </nav>
 
