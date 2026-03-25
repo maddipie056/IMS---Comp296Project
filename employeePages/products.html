@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='empdashboard.css')}}">
+<head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <h2>Inventory</h2>
+            </div>
+            <nav class = "menu">
+                <a href="{{url_for('employee.dashboard')}}">Dashboard</a>
+                <a href="{{url_for('employee.products')}}" class="active">Products</a>
+                <a href="{{url_for('employee.categories')}}">Categories</a>
+            </nav>
+
+            <div class="logout-section">
+                <p class="username">{{username}}</p>
+                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">Products</h1>
+
+            <section class="controls">
+                 <form action="" method="GET" id="filterForm" class="controls-form">
+                    <input type="text" name="search" class="search" placeholder="Search products...">
+
+                    <select name="sort">
+                        <option value="">Sort by</option>
+                        <option value="name_asc">Name (A-Z)</option>
+                        <option value="name_desc">Name (Z-A)</option>
+                        <option value="quantity_asc">Quantity (Low to High)</option>
+                        <option value="quantity_desc">Quantity (High to Low)</option>
+                    </select>
+
+                    <select name="filter">
+                        <option value="">Filter by Category</option>
+                        {% for category in categories %}
+                        <option value="{{ category }}">{{ category}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="control-buttons">
+                        <button type = "submit" class="sort-button">Sort</button>
+                        <button type = "submit" class="filter-button">Filter</button>
+                        <a href="{{ url_for('employee.products') }}" class="reset-button">Reset</a>
+                    </div>
+            </section>
+            <section class="table-section">
+                <div class="table-header">
+                    <h2>All Products</h2>
+                    <td>
+                        <button class="adjust-button" onclick="openAdjustModel('{{item.item_id}}',
+                         '{{item.item_name}}', '{{item.quantity}}')">Adjust
+                        </button>
+                    </td>
+                    <div id="adjustModel" class="model">
+                        <div class = "model-content">
+                            <h3> id="adjustItemName"</h3>
+                            <p>Current Quantity: <span id="adjustCurrentQty"></span></p>
+
+                            <label>Change Amount</label>
+                            <input type="number" id="adjustAmount" min="1" value = "1">
+
+                            <div class = "adjust-actions">
+                                <button class = "increase-button" onclick="submitAdjustment('increase')">Increase</button>
+                                <button class = "decrease-button" onclick="submitAdjustment('decrease')">Decrease</button>
+                            </div>
+                            <button class = "close-button" onclick="closetAdjustModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Product ID</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items%}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.item_id }}</td>
+                            <td>{{ item.sku }}</td>
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </main>
+    </div>    
+</body>
+</html>
+
