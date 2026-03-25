@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='admindashboard.css')}}">
+<head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <h2>Admin</h2>
+            </div>
+            <nav class = "menu">
+                <a href="{{url_for('admin.dashboard')}}" class="active">Dashboard</a>
+                <a href="{{url_for('admin.accounts')}}">Accounts</a>
+                <a href="{{url_for('admin.create_account')}}">Create Account</a>
+                <a href="{{url_for('admin.roles')}}">Role Management</a>
+            </nav>
+
+            <div class="logout-section">
+                <p class="username">{{username}}</p>
+                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="metrics">
+                <div class="metric-card">
+                    <h3>All Accounts</h3>
+                    <p class="metric-value">{{ all_accounts }}</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Employees</h3>
+                    <p class="metric-value">{{ active_employees }}</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Managers</h3>
+                    <p class="metric-value">{{ active_managers }}</p>
+                </div>
+                <div class="Inactive Accounts">
+                    <h3>Inactive Accounts</h3>
+                    <p class="metric-value">{{ inactive_accounts }}</p>
+                </div>
+            </section>
+            
+            <section class="table-section">
+                <h2>Quick Actions<h2>
+                <div class="quick-actions">
+                    <a href="{{url_for('admin.create_account')}}" class="primary-button">Create Account</a>
+                    <a href="{{url_for('admin.accounts')}}" class="secondary-button">View Accounts</a>
+                    <a href="{{url_for('admin.roles')}}" class="secondary-button">Manage Roles</a>
+                <div>
+            <section>
+            <section class="table-section">
+                <h2>Recent Activity</h2>
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in recent_logs%}
+                        <tr>
+                            <td>{{ log.username }}</td>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            
+        </main>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Account</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='admindashboard.css')}}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <h2>Admin</h2>
+            </div>
+            <nav class = "menu">
+                <a href="{{url_for('admin.dashboard')}}">Dashboard</a>
+                <a href="{{url_for('admin.accounts')}}">Accounts</a>
+                <a href="{{url_for('admin.create_account')}}" class="active">Create Account</a>
+                <a href="{{url_for('admin.roles')}}">Role Management</a>
+            </nav>
+
+            <div class="logout-section">
+                <p class="username">{{username}}</p>
+                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h2>Edit Account</h2>
+            <section class="form-section">
+                <form method="POST" action="simple-form">
+                    <label>Search User</label>
+                    <input type="text" name="search" placeholder="Enter username">
+                    <hr>
+                    <label>First Name*</label>
+                    <input type="text" name="first_name" value={{user.first_name}} required>
+
+                    <label>Last Name*</label>
+                    <input type="text" name="last_name" value={{user.last_name}} required>
+
+                    <label>Email*</label>
+                    <input type="text" name="email" value={{user.email}} required>
+
+                    <label>Role*</label>
+                    <select name="role" required>
+                        <option value="employee" {%if user.role=='employee'%}selected{%endif%}>Employee</option>
+                        <option value="manager" {%if user.role=='manager'%}selected{%endif%}>Manager</option>
+                        <option value="admin" {%if user.role=='admin'%}selected{%endif%}>Admin</option>
+                    </select>
+
+                    <label>Status*</label>
+                    <select name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="active" {%if user.status=='active'%}selected{%endif%}>Active</option>
+                        <option value="inactive" {%if user.status=='inactive'%}selected{%endif%}>Inactive</option>
+                    </select>
+                    <div class="form-buttons">
+                        <button class="primary-button">Save</button>
+                        <button type="reset" class="secondary-button">Reset</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
