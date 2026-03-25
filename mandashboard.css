@@ -1,0 +1,270 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+body {
+    background-color: #f4f4f4;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+.dashboard-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.sidebar {
+    width: 240px;
+    background-color: #c62828;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 20px;
+}
+.brand {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    display: block;
+}
+.brand h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 12px;
+    transition: 0.2s;
+    border-radius: 6px;
+    font-weight: bold;
+}
+.menu a:hover {
+    background: rgba(255,255,255,0.15);
+}
+.menu a.active{
+    background: #ffffff;
+    color: #c62828;
+}
+.logout-section{
+    margin-top: auto;
+    text-align: center;
+}
+.logout-section .username {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.logout-btn {
+    background: #b71c1c;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.logout-btn:hover {
+    background: #9a0007;
+}
+.main-content {
+    flex: 1;
+    padding: 25px 35px;
+    overflow-y: auto;
+}
+.metrics {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.metric-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.metric-card h3 {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+.metric-card .value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+.metric-card .value.out{
+    color: #c62828;
+}
+.controls {
+    display: flex;
+    margin-bottom: 30px;
+    justify-content: space-between;
+}
+.controls form {
+    display: flex;
+    gap: 12px;
+    align-items:center;
+}
+.controls input.search, .controls select{
+    padding: 6px 10px;
+    font-size: 14px;
+    height: 32px;
+    border-radius: 4px;
+}
+.search{
+    width: 60%;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.control-buttons button {
+    background: #c62828;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 10px;
+}
+.control-buttons{
+    display: flex;
+    gap: 10px;
+}
+.control-buttons button:hover {
+    background: #9a0007;
+}
+.sort-button, .filter-button {
+    padding: 6px 14px;
+    border-radius: 4px;
+    height: 32px;
+    font-size: 14px;
+}
+.table-section {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+}
+
+.table-header h2 {
+    margin: 0;
+    padding: 0;
+}
+.adjust-button {
+    background: #c62828;
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    position: relative;
+    top: -5px
+}
+.adjust-button:hover {
+    background: #9a0007;
+}
+.increase-button {
+    background: #2ecc71;
+    color: #fff;
+}
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.decrease-button {
+    background: #e74c3c;
+    color: #fff;
+}
+.close-button {
+    background: #777;
+    color: #fff;
+}
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.product-table th{
+    text-align: left;
+    padding: 12px;
+    background: #f2f2f2;
+    font-size: 14px;
+}
+.product-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+.chart-section {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.chart-section h2 {
+    margin-bottom: 20px;
+}
+.chart-container {
+    width: 100%;
+    height: 300px;
+}
+.ta-alert {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+    min-width: 50px;
+}
+.ta-alert.warning{
+    background: #ff9800;
+    color: #fff;
+}
+.ta-alert.critical{
+    background: #c62828;
+    color: #fff;
+}
+.ta-alert.normal{
+    background: #4caf50;
+    color: #fff;
+}
+.ta-cell {
+    text-align: left;
+}
+.reset-button {
+    background: #777;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    height: 32px;
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+.reset-button:hover {
+    background: #555;
+}
