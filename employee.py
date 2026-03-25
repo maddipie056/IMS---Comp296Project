@@ -1,3 +1,5 @@
+from operator import or_
+
 from flask import Blueprint, render_template, session, redirect, url_for, request
 from app import db
 from models import Item
@@ -64,7 +66,7 @@ def products():
 
     query = Item.query
     if search:
-        query = query.filter(Item.item_name.ilike(f'%{search}%'))
+        query = query.filter(or_(Item.item_name.ilike(f"{search}%"), Item.item_name.ilike(f"%{search}%")))
 
     if category_filter:
         query = query.filter(Item.category==category_filter)
