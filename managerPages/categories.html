@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='mandashboard.css')}}">
+<head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <h2>Inventory</h2>
+            </div>
+            <nav class = "menu">
+                <a href="{{url_for('manager.dashboard')}}">Dashboard</a>
+                <a href="{{url_for('manager.products')}}">Products</a>
+                <a href="{{url_for('manager.categories')}}"class="active">Categories</a>
+                <a href="#">Reports</a>
+            </nav>
+
+            <div class="logout-section">
+                <p class="username">{{username}}</p>
+                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">Categories</h1>
+            <section class="table-section">
+                <div class="table-header">
+                    <h2>All Categories</h2>
+                </div>
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th>Category Name</th>
+                            <th>Total Products</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                            <td>{{ category.name }}</td>
+                            <td>{{ category.product_count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </main>
+    </div>    
+</body>
+</html>
+
