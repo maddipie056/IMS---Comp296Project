@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from app import db
+from application import db
 from models import Item
 
 item_args = reqparse.RequestParser()
