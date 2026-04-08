@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='mandashboard.css')}}">
+<head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <h2>Inventory</h2>
+            </div>
+            <nav class = "menu">
+                <a href="{{url_for('manager.dashboard')}}">Dashboard</a>
+                <a href="{{url_for('manager.products')}}">Products</a>
+                <a href="{{url_for('manager.categories')}}">Categories</a>
+                <a href="{{url_for('manager.low_stock')}}" class="active">Low Stock</a>
+                <a href="{{url_for('manager.reports')}}">Reports</a>
+            </nav>
+
+            <div class="logout-section">
+                <p class="username">{{username}}</p>
+                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">Low Stock Items</h1>
+
+            <section class="table-section">
+                <div class="table-header">
+                    <h2>Items Below Threshold({{ threshold }})</h2>
+                </div>
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Product ID</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Adjust</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in low_stock_items%}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.item_id }}</td>
+                            <td>{{ item.sku }}</td>
+                            <td>{{ item.category }}</td>
+                            <td id="quantity-{{item.item_id}}">{{ item.quantity }}</td>
+                            <td>
+                                <button onclick="openAdjustmentModal('{{ item.item_id }}', '{{ item.item_name|tojson }}', '{{ item.quantity }}')">Adjust</button>
+                            </td>
+
+                            <td class="ta-cell">
+                                {% if item.quantity == 0 %}
+                                    <span class="ta-alert critical">Out of Stock</span>
+                                {% elif item.quantity < item.low_stock_threshold %}
+                                    <span class="ta-alert warning">Low {{ item.quantity }}</span>
+                                {% else %}
+                                    <span class="ta-alert normal">{{item.quantity}}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if low_stock_items|length == 0 %}
+                    <p>No items below the threshold.</p>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+    <div id="adjustmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdjustmentModal()">&times;</span>
+            <h2>Adjust Stock</h2>
+            <div>
+                <label>Item:</label>
+                <span id="modalItemName"></span>
+            </div>
+            <div>
+                <label>Current Quantity</label>
+                <span id="modalItemQuantity"></span>
+            </div>
+            <div>
+                <label>Amount</label>
+                input type="number" id="adjustmentQuantity" min="1">
+                <p id="adjustmentError" style="color: red;"></p>
+            </div>
+            <div class="modal-actions">
+                <button onclick="submitAdjustment('increase')">Increase</button>
+                <button onclick="submitAdjustment('decrease')">Decrease</button>
+            </div>
+        <div>
+    </div>    
+    <script>
+        const STAFF_ID = "{{ staff_id }}";
+    </script>
+    <script src="{{ url_for('static', filename='mandashboard.js') }}"></script>
+    <script src="{{url_for('static', filename='empdashboard.js')}}"></script>
+</body>
+</html>
+
