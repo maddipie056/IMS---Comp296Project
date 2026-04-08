@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 import os
+from resources.items import Items, ItemLookup
 
 
 
@@ -20,28 +21,33 @@ def create_app():
     with app.app_context():
         db.Model.metadata.reflect(bind=db.engine)
 
-    from auth import auth
+    from apps.auth import auth
     app.register_blueprint(auth)
+
+    from apps.admin import admin
+    from apps.manager import manager
+    from apps.employee import employee
+
+    app.register_blueprint(admin)
+    app.register_blueprint(manager)
+    app.register_blueprint(employee)
 
     api = Api(app)
 
     from resources.items import Items
     from resources.staff import Staff
-    from resources.adjustments import StockAdjustment
+    from resources.adjustments import StockAdjustmentAPI
 
     api.add_resource(Items,'/api/items/<int:item_id>')
     api.add_resource(Staff,'/api/staff/<int:staff_id>')
-    api.add_resource(StockAdjustment,'/api/adjustments/<int:adjustment_id>')
+    api.add_resource(StockAdjustmentAPI,'/api/adjustments','/api/adjustments/<int:adjustment_id>')
+    api.add_resource(ItemLookup,'/api/items/lookup')
 
 
-    @app.route('/login')
-    def index():
-        return redirect(url_for('auth.login'))
 
     @app.route('/')
-    def home():
-        return redirect(url_for('auth.home'))
-
+    def index():
+        return redirect(url_for('auth.login'))
 
 
     return app
