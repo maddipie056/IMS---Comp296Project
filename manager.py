@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, session, redirect, url_for, request
-from app import db 
-from models import Item
+from flask import Blueprint, current_app, render_template, session, redirect, url_for, request
+from sqlalchemy import or_
+from apps import db 
+from apps.models import Category, Item
 from resources import items
 
 
@@ -18,10 +19,10 @@ def dashboard():
 
     query = Item.query
     if search:
-        query = query.filter(Item.item_name.ilike(f'%{search}%'))
+        query = query.filter(or_(Item.item_name.ilike(f"{search}%"), Item.item_name.ilike(f"%{search}%")))
 
     if category_filter:
-        query = query.filter(Item.category==category_filter)
+        query = query.filter(Item.category_id==int(category_filter))
     
     if sort == 'name_asc':
         query = query.order_by(Item.item_name.asc())
@@ -40,8 +41,7 @@ def dashboard():
 
     low_stock_items = [item for item in items if item.quantity < item.low_stock_threshold and item.quantity > 0]
 
-    raw_categories = db.session.query(Item.category).distinct().all()
-    categories = [c[0] for c in raw_categories]
+    categories = Category.query.all()
 
     return render_template('manager/dashboard.html', username=session['username']
                            , items=items,
@@ -68,7 +68,7 @@ def products():
         query = query.filter(Item.item_name.ilike(f'%{search}%'))
 
     if category_filter:
-        query = query.filter(Item.category==category_filter)
+        query = query.filter(Item.category_id==int(category_filter))
     
     if sort == 'name_asc':
         query = query.order_by(Item.item_name.asc())
@@ -85,13 +85,12 @@ def products():
     total_stock = sum(item.quantity for item in items)
     out_of_stock = sum(1 for item in items if item.quantity == 0)
 
-    raw_categories = db.session.query(Item.category).distinct().all()
-    categories = [c[0] for c in raw_categories]
+    categories = Category.query.all()
 
     return render_template('manager/products.html'
                             , username=session['username']
                            , items=items,
-                           categories = categories)
+                           categories = categories, staff_id=session['staff_id'],  threshold = current_app.config.get('LOW_STOCK_THRESHOLD', 10))
 
 @manager.route('/categories')
 def categories():
@@ -105,9 +104,34 @@ def categories():
             category_map[item.category] = 0
         category_map[item.category] += 1
 
-    category_counts = db.session.query(Item.category, db.func.count(Item.item_id)).group_by(Item.category).all()
+    category_counts = db.session.query(Category.name, db.func.count(Item.item_id)).outerjoin(Item, Category.category_id == Item.category_id).group_by(Category.name).all()
 
     return render_template('manager/categories.html'
                             , username=session['username']
                            , items=Item.query.all(),
-                           category_counts=category_counts)
+                           categories=category_counts)
+@manager.route('/low_stock')
+def low_stock():
+    threshold = current_app.config.get('LOW_STOCK_THRESHOLD', 10)
+
+    low_stock_items = Item.query.filter(Item.quantity < threshold).all()
+
+    return render_template('manager/low_stock.html', username=session['username'], low_stock_items=low_stock_items, threshold=threshold, staff_id=session['staff_id'])
+@manager.route('/reports')
+def reports():
+    return render_template('manager/reports.html', username=session['username'])
+
+@manager.route('/api/update-threshold', methods=['POST'])
+def update_threshold():
+    if 'loggedin' not in session or session.get('role') != 'manager':
+        return redirect(url_for('auth.login'))
+    
+    new_threshold = request.form.get('threshold')
+    if new_threshold is not None:
+        try:
+            new_threshold = int(new_threshold)
+            current_app.config['LOW_STOCK_THRESHOLD'] = new_threshold
+            return redirect(url_for('manager.low_stock'))
+        except ValueError:
+            return "Invalid threshold value", 400
+    return "Threshold value is required", 400
