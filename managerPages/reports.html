@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Manager Reports</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='mandashboard.css')}}">
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <div class="brand">
+                    <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                    <h2>Inventory</h2>
+                </div>
+                <nav class = "menu">
+                    <a href="{{url_for('manager.dashboard')}}">Dashboard</a>
+                    <a href="{{url_for('manager.products')}}">Products</a>
+                    <a href="{{url_for('manager.categories')}}">Categories</a>
+                    <a href="{{url_for('manager.low_stock')}}">Low Stock</a>
+                    <a href="{{url_for('manager.reports')}}" class="active">Reports</a>
+                </nav>
+
+                <div class="logout-section">
+                    <p class="username">{{username}}</p>
+                    <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <h1 class="page-title">Reports</h1>
+
+                <section class = "metrics-row">
+                    <div class="metric-card">
+                        <h2>Total Products</h2>
+                        <p>{{ total_products }}</p>
+                    </div>
+                    <div class="metric-card">
+                        <h2>Total Stock</h2>
+                        <p>{{ total_stock }}</p>
+                    </div>
+                    <div class="metric-card">
+                        <h2>Low Stock Items</h2>
+                        <p>{{ low_stock_items }}</p>
+                    </div>
+                    <div class="metric-card">
+                        <h2>Recent Adjustments</h2>
+                        <p>{{ recent_adjustments }}</p>
+                    </div>
+                </section>
+                <section class="table-section">
+                    <div class="table-header">
+                        <h2>Recent Stock Adjustments</h2>
+                    </div>
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Adjustment ID</th>
+                                <th>Item</th>
+                                <th>Staff</th>
+                                <th>Amount</th>
+                                <th>Previous Quantity</th>
+                                <th>New Quantity</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for adj in adjustments %}
+                            <tr>
+                                <td>{{ adj.adjustment_id }}</td>
+                                <td>{{ adj.item_name }}</td>
+                                <td>{{ adj.staff_name }}</td>
+                                <td>{{ adj.change_amount }}</td>
+                                <td>{{ adj.previous_quantity }}</td>
+                                <td>{{ adj.new_quantity }}</td>
+                                <td>{{ adj.timestamp }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+        </div>
+    </body>
+</html>
