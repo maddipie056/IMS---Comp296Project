@@ -52,11 +52,9 @@
                             <td>{{ item.item_name }}</td>
                             <td>{{ item.item_id }}</td>
                             <td>{{ item.sku }}</td>
-                            <td>{{ item.category }}</td>
+                            <td>{{ item.category_name }}</td>
                             <td id="quantity-{{item.item_id}}">{{ item.quantity }}</td>
-                            <td>
-                                <button onclick="openAdjustmentModal('{{ item.item_id }}', '{{ item.item_name|tojson }}', '{{ item.quantity }}')">Adjust</button>
-                            </td>
+                        
 
                             <td class="ta-cell">
                                 {% if item.quantity == 0 %}
@@ -77,30 +75,7 @@
                 {% endif %}
             </section>
         </main>
-    </div>
-    <div id="adjustmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeAdjustmentModal()">&times;</span>
-            <h2>Adjust Stock</h2>
-            <div>
-                <label>Item:</label>
-                <span id="modalItemName"></span>
-            </div>
-            <div>
-                <label>Current Quantity</label>
-                <span id="modalItemQuantity"></span>
-            </div>
-            <div>
-                <label>Amount</label>
-                input type="number" id="adjustmentQuantity" min="1">
-                <p id="adjustmentError" style="color: red;"></p>
-            </div>
-            <div class="modal-actions">
-                <button onclick="submitAdjustment('increase')">Increase</button>
-                <button onclick="submitAdjustment('decrease')">Decrease</button>
-            </div>
-        <div>
-    </div>    
+    </div>   
     <script>
         const STAFF_ID = "{{ staff_id }}";
     </script>
