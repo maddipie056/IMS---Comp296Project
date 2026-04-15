@@ -17,7 +17,8 @@
                 <a href="{{url_for('manager.dashboard')}}" class="active">Dashboard</a>
                 <a href="{{url_for('manager.products')}}">Products</a>
                 <a href="{{url_for('manager.categories')}}">Categories</a>
-                <a href="#">Reports</a>
+                <a href="{{url_for('manager.low_stock')}}">Low Stock</a>
+                <a href="{{url_for('manager.reports')}}">Reports</a>
             </nav>
 
             <div class="logout-section">
@@ -69,6 +70,7 @@
             <section class="table-section">
                 <div class="table-header">
                     <h2>All Products</h2>
+
                 </div>
                 <table class="product-table">
                     <thead>
@@ -85,7 +87,7 @@
                         <tr>
                             <td>{{ item.item_name }}</td>
                             <td>{{ item.item_id }}</td>
-                            <td>{{ item.category }}</td>
+                            <td>{{ item.category_name }}</td>
                             <td>{{ item.quantity }}</td>
 
                             <td class="ta-cell">
