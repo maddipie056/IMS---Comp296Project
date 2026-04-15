@@ -17,7 +17,8 @@
                 <a href="{{url_for('manager.dashboard')}}">Dashboard</a>
                 <a href="{{url_for('manager.products')}}">Products</a>
                 <a href="{{url_for('manager.categories')}}"class="active">Categories</a>
-                <a href="#">Reports</a>
+                <a href="{{url_for('manager.low_stock')}}">Low Stock</a>
+                <a href="{{url_for('manager.reports')}}">Reports</a>
             </nav>
 
             <div class="logout-section">
@@ -40,10 +41,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for category in categories %}
+                        {% for category, count in categories %}
                         <tr>
-                            <td>{{ category.name }}</td>
-                            <td>{{ category.product_count }}</td>
+                            <td>{{ category }}</td>
+                            <td>{{ count }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -52,4 +53,3 @@
     </div>    
 </body>
 </html>
-
