@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from app import db
-from models import Staff
+from . import db
+from apps.models import Staff
 from flask import Blueprint
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -21,9 +21,15 @@ def login():
             session['username'] = user.username
             session['role'] = user.role
             
-            return redirect(url_for('auth.home'))
+            if user.role == 'admin':
+                return redirect(url_for('admin.dashboard'))
+            elif user.role == 'manager':
+                return redirect(url_for('manager.dashboard'))
+            else:
+                return redirect(url_for('employee.dashboard'))
         else:
             msg = "Incorrect username or password"
+            
     return render_template('index.html', msg=msg)
     
 
@@ -41,12 +47,6 @@ def register():
 
         return redirect(url_for('auth.login'))
     return render_template('register.html')
-
-@auth.route('/home')
-def home():
-    if 'loggedin' not in session:
-        return redirect(url_for('auth.login'))
-    return render_template('home.html', username = session['username'])
 
 @auth.route('/profile')
 def profile():
