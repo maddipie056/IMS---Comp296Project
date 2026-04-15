@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Manager Dashboard</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='mandashboard.css')}}">
-<head>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='mandashboard.css') }}">
+</head>
 <body>
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="brand">
-                <img class = "brand-logo" src="{{url_for('static', filename='images/myicon.png')}}" alt="Dash Icon">
+                <img class="brand-logo" src="{{ url_for('static', filename='images/myicon.png') }}" alt="Dash Icon">
                 <h2>Inventory</h2>
             </div>
-            <nav class = "menu">
-                <a href="{{url_for('manager.dashboard')}}">Dashboard</a>
-                <a href="{{url_for('manager.products')}}" class="active">Products</a>
-                <a href="{{url_for('manager.categories')}}">Categories</a>
-                <a href="{{url_for('manager.low_stock')}}">Low Stock</a>
-                <a href="{{url_for('manager.reports')}}">Reports</a>
+
+            <nav class="menu">
+                <a href="{{ url_for('manager.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('manager.products') }}" class="active">Products</a>
+                <a href="{{ url_for('manager.categories') }}">Categories</a>
+                <a href="{{ url_for('manager.low_stock') }}">Low Stock</a>
+                <a href="{{ url_for('manager.reports') }}">Reports</a>
             </nav>
 
             <div class="logout-section">
-                <p class="username">{{username}}</p>
-                <a href="{{url_for('auth.logout')}}" class="logout-btn">Logout</a>
+                <p class="username">{{ username }}</p>
+                <a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout</a>
             </div>
         </aside>
 
@@ -32,7 +32,7 @@
 
             <section class="threshold-section">
                 <label>Low Stock Threshold:</label>
-                <input type="number" id="thresholdInput" value="{{threshold}}">
+                <input type="number" id="thresholdInput" value="{{ threshold }}">
                 <button onclick="updateThreshold()">Save</button>
             </section>
 
@@ -51,20 +51,23 @@
                     <select name="filter">
                         <option value="">Filter by Category</option>
                         {% for category in categories %}
-                        <option value="{{ category }}">{{ category}}</option>
+                        <option value="{{ category.category_id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
 
                     <div class="control-buttons">
-                        <button type = "submit" class="sort-button">Sort</button>
-                        <button type = "submit" class="filter-button">Filter</button>
+                        <button type="submit" class="sort-button">Sort</button>
+                        <button type="submit" class="filter-button">Filter</button>
                         <a href="{{ url_for('manager.products') }}" class="reset-button">Reset</a>
                     </div>
+                </form>
             </section>
+
+            <!-- Products Table -->
             <section class="table-section">
                 <div class="table-header">
                     <h2>All Products</h2>
-                    <button class="adjust-button">Adjust</button>
+                    <button class="add-item-button" onclick="openAddItemModal()">Add New Item</button>
                 </div>
                 <table class="product-table">
                     <thead>
@@ -79,24 +82,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in items%}
+                        {% for item in items %}
                         <tr>
                             <td>{{ item.item_name }}</td>
                             <td>{{ item.item_id }}</td>
                             <td>{{ item.sku }}</td>
-                            <td>{{ item.category }}</td>
-                            <td id="quantity-{{item.item_id}}">{{ item.quantity }}</td>
+                            <td>{{ item.category_name }}</td>
+                            <td id="quantity-{{ item.item_id }}">{{ item.quantity }}</td>
                             <td>
-                                <button onclick="openAdjustmentModal('{{ item.item_id }}', '{{ item.item_name|tojson }}', '{{ item.quantity }}')">Adjust</button>
+                                <button class="adjust-button" data-item-id="{{ item.item_id }}" data-item-name="{{ item.item_name }}" data-quantity="{{ item.quantity }}">Adjust</button>
                             </td>
-
                             <td class="ta-cell">
                                 {% if item.quantity == 0 %}
                                     <span class="ta-alert critical">0</span>
                                 {% elif item.quantity < item.low_stock_threshold %}
                                     <span class="ta-alert warning">{{ item.quantity }}</span>
                                 {% else %}
-                                    <span class="ta-alert normal">{{item.quantity}}</span>
+                                    <span class="ta-alert normal">{{ item.quantity }}</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -104,36 +106,85 @@
                     </tbody>
                 </table>
             </section>
-
         </main>
     </div>
-    <div id=""adjustmentModal" class="modal">
+    <div id="adjustmentModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeAdjustmentModal()">&times;</span>
             <h2>Adjust Stock</h2>
+
             <div>
                 <label>Item:</label>
                 <span id="modalItemName"></span>
             </div>
+
             <div>
-                <label>Current Quantity</label>
+                <label>Current Quantity:</label>
                 <span id="modalItemQuantity"></span>
             </div>
+
             <div>
                 <label>Amount</label>
-                input type="number" id="adjustmentQuantity" min="1">
-                <p id="adjustmentError" style="color: red;"></p>
+                <input type="number" id="adjustmentAmount" min="1">
+                <p id="adjustmentError"></p>
             </div>
+
             <div class="modal-actions">
                 <button onclick="submitAdjustment('increase')">Increase</button>
                 <button onclick="submitAdjustment('decrease')">Decrease</button>
             </div>
-        <div>
-    </div>    
+        </div>
+    </div>
+
+     <div id = "addItemModal" class = "modal">
+        <div class = "modal-content">
+            <h2>Add New Item</h2>
+
+            <label>Item Name</label>
+            <input type="text" id="item_name">
+
+            <label>Category</label>
+            <select id="itemCategoryId">
+                <option value="">Select Category</option>
+                {% for category in categories %}
+                <option value="{{ category.category_id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+
+
+            <label>SKU</label>
+            <input type="text" id="sku">
+
+            <label>Quantity</label>
+            <input type="number" id="quantity" min="0">
+
+            <label>Low Stock Threshold</label>
+            <input type="number" id="low_stock_threshold" min="0">
+
+            <button onclick = "submitNewItem()">Add Item</button>
+            <button onclick = "closeAddItemModal()">Cancel</button>
+        </div>
+    </div>
+
     <script>
         const STAFF_ID = "{{ staff_id }}";
     </script>
     <script src="{{ url_for('static', filename='mandashboard.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.adjust-button').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = parseInt(btn.getAttribute('data-item-id'), 10);
+                    var name = btn.getAttribute('data-item-name');
+                    var qty = parseInt(btn.getAttribute('data-quantity'), 10);
+                    // call existing function defined in mandashboard.js
+                    if (typeof openAdjustmentModal === 'function') {
+                        openAdjustmentModal(id, name, qty);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-
