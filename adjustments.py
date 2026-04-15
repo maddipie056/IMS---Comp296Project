@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse 
-from models import Staff, StockAdjustment, Item
-from app import db
+from apps.models import Staff, StockAdjustment, Item
+from apps import db
 from datetime import datetime
  
 
@@ -17,13 +17,16 @@ class StockAdjustmentAPI(Resource):
             adj = StockAdjustment.query.get_or_404(adjustment_id)
             return {col: getattr(adj, col) for col in adj.__table__.columns.keys()}
         adjustments = StockAdjustmentAPI.query.all()
-        return [{col: getattr(a, col) for col in a.__table__.columns.key()} for a in adjustments]
+        return [{col: getattr(a, col) for col in a.__table__.columns.keys()} for a in adjustments]
     def post(self):
         args = stock_adj_args.parse_args()
         item_id = args['item_id']
         staff_id = args['staff_id']
         amount = args['change_amount']
-        action = args['action'].lower()
+        action = args['action']
+
+        if not item_id or not staff_id or not amount or not action:
+            return {"message": "All fields are required"}, 400
 
         if action not in ['increase', 'decrease']:
             return {"message": "Action must be 'increase' or 'decrease'"}, 400
@@ -50,15 +53,26 @@ class StockAdjustmentAPI(Resource):
             item_id=item_id,
             staff_id=staff_id,
             change_amount=amount if action == 'increase' else -amount,
-            action=action,
-            timestamp=datetime.utcnow()
+            adjustment_timestamp=datetime.utcnow()
         )
         db.session.add(adjustment)
         db.session.commit()
 
-        return {"message": "Stock updated successfully", "item": {"id": item.id, "name": item.name, "quantity": item.quantity}, 
-                "adjustment":{"id": adjustment.id, "action": adjustment.action, "amount": adjustment.change_amount, "previous_quantity": previous_quantity,
-                              "new_quantity": item.quantity, "timestamp": adjustment.timestamp.isoformat()}}, 201
+        return {"message": "Stock updated successfully",
+                 "item": {
+                     "id": item.item_id,
+                     "name": item.item_name,
+                     "quantity": item.quantity
+                }, 
+                "adjustment":{
+                    "id": adjustment.adjustment_id,
+                    "amount": adjustment.change_amount,
+                    "previous_quantity": previous_quantity,
+                    "new_quantity": item.quantity,
+                    "action": "increase" if adjustment.change_amount > 0 else "decrease",
+                    "timestamp": adjustment.adjustment_timestamp.isoformat()
+                }
+        }, 201
 
 class StockAdjustmentListAPI(Resource):
     def get(self):
