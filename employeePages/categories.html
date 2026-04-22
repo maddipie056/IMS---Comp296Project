@@ -40,10 +40,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for category in categories %}
+                        {% for category, count in categories %}
                         <tr>
-                            <td>{{ category.name }}</td>
-                            <td>{{ category.product_count }}</td>
+                            <td>{{ category }}</td>
+                            <td>{{ count }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
