@@ -203,6 +203,7 @@ body {
 .controls-row{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 15px;
     gap: 15px;
 }
@@ -210,6 +211,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: nowrap;
 }
 .filter-form select{
     height: 36px;
@@ -220,19 +222,22 @@ body {
     padding: 0 12px;
 }
 .createacc-button {
-    display: flex;
+    display:flex;
     align-items: center;
     justify-content: center;
-    padding: 0 16px;
-    height: 36px;
+    padding: 0 22px;
+    height: 40px;
     background: #777;
     color: #fff;
     border-radius: 6px;
     text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
     white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 .createacc-button:hover {
-    background: #555;
+    background: #9a0007;
 }
 @media (max-width: 900px) {
     .metrics {
@@ -247,4 +252,76 @@ body {
     .table-section {
         max-width: 100%;
     }
+}
+.controls-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+.left-controls{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.reset-button{
+    height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 6px;
+    background: #e0e0e0;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+.reset-button:hover{
+    background: #bdbdbd;
+}
+.createaccount-button{
+    display:flex;
+    height: 36px;
+    padding: 0 12px;
+    align-items: center;
+    margin-left: auto;
+    background: #c62828;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+}
+.createaccount-button:hover {
+    background: #9a0007;
+}
+.recent-activity-container{
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+}
+.recent-activity-container::-webkit-scrollbar{
+    width: 8px;
+}
+.recent-activity-container::-webkit-scrollbar-thumb{
+    background: #c62828;
+    border-radius: 4px;
+}
+.recent-activity-container::-webkit-scrollbar-track{
+    background: #f2f2f2;
+}
+.inline-form{
+    display: inline;
+}
+.danger-link{
+    color: #b71c1c;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
 }
