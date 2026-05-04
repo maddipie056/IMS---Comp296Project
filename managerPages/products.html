@@ -87,12 +87,12 @@
                             <td>{{ item.item_name }}</td>
                             <td>{{ item.item_id }}</td>
                             <td>{{ item.sku }}</td>
-                            <td>{{ item.category_name }}</td>
+                            <td>{{ item.category }}</td>
                             <td id="quantity-{{ item.item_id }}">{{ item.quantity }}</td>
                             <td>
                                 <button class="adjust-button" data-item-id="{{ item.item_id }}" data-item-name="{{ item.item_name }}" data-quantity="{{ item.quantity }}">Adjust</button>
                             </td>
-                            <td class="ta-cell">
+                            <td class="ta-cell" id="ta-{{item.item_id}}">
                                 {% if item.quantity == 0 %}
                                     <span class="ta-alert critical">0</span>
                                 {% elif item.quantity < item.low_stock_threshold %}
