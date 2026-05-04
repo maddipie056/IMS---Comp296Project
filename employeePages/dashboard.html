@@ -55,7 +55,7 @@
                     <select name="filter">
                         <option value="">Filter by Category</option>
                         {% for category in categories %}
-                        <option value="{{ category }}">{{ category}}</option>
+                        <option value="{{ category.category_id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
 
@@ -66,8 +66,7 @@
                     </div>
             </section>
             <section class="table-section">
-                <div class="table-header">
-                    <h2>All Products</h2>
+                <h2 class="table-header">All Products</h2>
                 <table class="product-table">
                     <thead>
                         <tr>
