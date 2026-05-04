@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
-from models import Staff
-from app import db
+from apps.models import Staff
+from apps import db
 
 
 staff_args = reqparse.RequestParser()
