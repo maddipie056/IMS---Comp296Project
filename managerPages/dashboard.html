@@ -57,7 +57,7 @@
                     <select name="filter">
                         <option value="">Filter by Category</option>
                         {% for category in categories %}
-                        <option value="{{ category }}">{{ category}}</option>
+                        <option value="{{ category.category_id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
 
@@ -87,7 +87,7 @@
                         <tr>
                             <td>{{ item.item_name }}</td>
                             <td>{{ item.item_id }}</td>
-                            <td>{{ item.category_name }}</td>
+                            <td>{{ item.category }}</td>
                             <td>{{ item.quantity }}</td>
 
                             <td class="ta-cell">
