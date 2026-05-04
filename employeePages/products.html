@@ -43,7 +43,7 @@
                     <select name="filter">
                         <option value="">Filter by Category</option>
                         {% for category in categories %}
-                        <option value="{{ category }}">{{ category }}</option>
+                        <option value="{{ category.category_id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
 
@@ -79,7 +79,7 @@
                             <td>{{ item.category }}</td>
                             <td id="quantity-{{ item.item_id }}">{{ item.quantity }}</td>
                             <td>
-                                <button class="adjust-button" onclick="openAdjustmentModal('{{ item.item_id }}', '{{ item.item_name|tojson }}', '{{ item.quantity }}')">Adjust</button>
+                                <button class="adjust-button" onclick="openAdjustmentModal('{{ item.item_id }}', '{{ item.item_name}}', '{{ item.quantity }}')">Adjust</button>
                             </td>
                         </tr>
                         {% endfor %}
