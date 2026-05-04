@@ -11,3 +11,6 @@ class StockAdjustment(db.Model):
 
 class Category(db.Model):
     __table__ = db.Model.metadata.tables['categories']
+
+class Role(db.Model):
+    __table__ = db.Model.metadata.tables['roles']
