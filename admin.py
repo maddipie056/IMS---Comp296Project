@@ -61,10 +61,16 @@ def create_account():
         first = request.form['first_name']
         last = request.form['last_name']
         email = request.form['email']
-        phone = request.form['phone']
+        phone_number = request.form['phone_number']
         username = request.form['username']
-        role = request.form['role_id']
-        is_acactive = request.form['is_active']
+        password = request.form['password']
+        role_id = int(request.form['role_id'])
+
+        role_name = next(r.name for r in roles if r.id == role_id)
+
+        is_active = True
+
+
 
         if Staff.query.filter_by(username = username).first():
             return redirect(url_for('admin.create_account', error="username"))
@@ -72,17 +78,18 @@ def create_account():
         if Staff.query.filter_by(email = email).first():
             return redirect(url_for('admin.create_account', error="email"))
         
-        password_hash = generate_password_hash(username)
+        password_hash = generate_password_hash(password)
 
         new_user = Staff(
             first_name = first,
             last_name = last,
             email = email,
-            phone = phone,
+            phone_number = phone_number,
             username = username,
-            role_id = role,
-            is_active = is_acactive,
-            password_hash = password_hash
+            password_hash = password_hash,
+            role = role_name,
+            role_id = role_id,
+            is_active = is_active,
         )
 
         db.session.add(new_user)
@@ -95,35 +102,17 @@ def create_account():
                            roles=roles,
                            error=request.args.get("error"))
 
-@admin.route('/deactivate_accoount', methods = ['GET', 'POST'])
-def deactivate_account():
+@admin.route('/deactivate_account/<int:user_id>', methods = ['POST'])
+def deactivate_account(user_id):
     if 'loggedin' not in session or session.get('role') != 'admin':
         return redirect(url_for('auth.login'))
     
-    user = None
-    if request.method == 'POST':
-        if 'search' in request.form:
-            username = request.form['search']
-            user = Staff.query.filter_by(username=username).first()
-            return render_template('admin/deactivate_account.html',
-                                   username=session['username'],
-                                   user=user,
-                                   error="notfound" if not user else None)
-        
-        if 'deactivate' in request.form:
-            user_id = request.form['user_id']
-            user = Staff.query.get(user_id)
-
-            if user:
-                user.is_active = False
-                db.session.commit()
-                return redirect(url_for('admin.deactivate_account', success="1"))
-        return redirect(url_for('admin.deactivate_account', error="notfound"))
-    return render_template('admin/deactivate_account.html', 
-                           username=session['username'], 
-                           user=user, 
-                           success=request.args.get("success"), 
-                           error=request.args.get("error"))
+    user = Staff.query.get(user_id)
+    if user:
+        user.is_active = False
+        db.session.commit()
+                
+    return redirect(url_for('admin.view_accounts', success="deactivated"))
 
 @admin.route('/roles', methods=['GET', 'POST'])
 def roles():
@@ -168,10 +157,18 @@ def edit_account(user_id):
         user.first_name = request.form['first_name']
         user.last_name = request.form['last_name']
         user.email = request.form['email']
-        user.phone = request.form['phone']
+        user.phone_number = request.form['phone_number']
         user.username = request.form['username']
-        user.role_id = request.form['role_id']
-        user.is_active = True if request.form['is_active'] == "1" else False
+
+        if request.form['password']:
+            user.password_hash = request.form['password']
+
+
+        role_id = int(request.form['role_id'])
+        user.role_id = role_id
+        user.role = next(r.name for r in roles if r.id == role_id)
+
+        user.is_active = request.form['is_active'] == "1"
         
         db.session.commit()
         return redirect(url_for('admin.view_accounts', success="updated"))
