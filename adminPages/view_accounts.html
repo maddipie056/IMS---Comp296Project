@@ -15,7 +15,6 @@
             <nav class = "menu">
                 <a href="{{url_for('admin.dashboard')}}">Dashboard</a>
                 <a href="{{url_for('admin.view_accounts')}}" class="active">Accounts</a>
-                <a href="{{url_for('admin.roles')}}">Role Management</a>
             </nav>
 
             <div class="logout-section">
@@ -26,20 +25,25 @@
         <main class="main-content">
             <h2>All Accounts</h2>
 
-            <div class="controls_row">
-                <form method="GET" class="search-form">
-                    <input type="text" name="search" placeholder="Search by username or name" value="{{ request.args.get('search', '') }}">
-                    <button type="submit" class="primary-button">Search</button>
-                </form>
-                <form method="GET" class="filter-form">
-                    <select name="role" onchange="this.form.submit()">
-                        <option value="">Filter by Role</option>
-                        <option value="employee" {% if request.args.get('role') == 'employee' %}selected{% endif %}>Employee</option>
-                        <option value="manager" {% if request.args.get('role') == 'manager' %}selected{% endif %}>Manager</option>
-                        <option value="admin" {% if request.args.get('role') == 'admin' %}selected{% endif %}>Admin</option>
-                    </select>
-                </form>
-                <a href="{{url_for('admin.create_account')}}" class="createacc-button">Create Account</a>
+            <div class="controls-row">
+                <div class = "left-controls">
+                    <form method="GET" class="search-form">
+                        <input type="text" name="search" placeholder="Search by username or name" value="{{ request.args.get('search', '') }}">
+                        <button type="submit" class="primary-button">Search</button>
+                    </form>
+                    <form method="GET" class="filter-form">
+                        <select name="role">
+                            <option value="">Filter by Role</option>
+                            <option value="employee"  {% if role == "employee" %}selected{% endif %}>Employee</option>
+                            <option value="manager"  {% if role == "manager" %}selected{% endif %}>Manager</option>
+                            <option value="admin"  {% if role == "admin" %}selected{% endif %}>Admin</option>
+                        </select>
+                        <button type="submit" class="primary-button">Filter</button>
+                    </form>
+                    <a href="{{url_for('admin.view_accounts')}}" class="reset-button">Reset</a>
+                </div>
+
+                <a href="{{url_for('admin.create_account')}}" class="createaccount-button">Create Account</a>
 
             </div>
             <table class="product-table">
@@ -59,11 +63,14 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.first_name }} {{ user.last_name }}</td>
                         <td>{{ user.role }}</td>
-                        <td>{{ user.status }}</td>
+                        <td>{{ "Active" if user.is_active else "Inactive" }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            <a href="{{ url_for('admin.edit_account', user_id=user.id) }}" class="action-link">Edit</a>
-                            <a href="{{ url_for('admin.deactivate_account', user_id=user.id) }}" class="action-link">Deactivate</a>
+                            <a href="{{ url_for('admin.edit_account', user_id=user.staff_id) }}" class="action-link">Edit</a>
+                            
+                            <form method="POST" action="{{ url_for('admin.deactivate_account', user_id=user.staff_id) }}" class="inline-form">
+                                <button type="submit" class="action-link danger-link">Deactivate</button>
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}
