@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Account</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='admindashboard.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='admdashboard.css')}}">
 </head>
 <body>
     <div class="dashboard-container">
@@ -14,8 +14,7 @@
             </div>
             <nav class = "menu">
                 <a href="{{url_for('admin.dashboard')}}">Dashboard</a>
-                <a href="{{url_for('admin.view_accounts')}}">Accounts</a>
-                <a href="{{url_for('admin.roles')}}">Role Management</a>
+                <a href="{{url_for('admin.view_accounts')}}" class="active">Accounts</a>
             </nav>
 
             <div class="logout-section">
@@ -27,10 +26,7 @@
         <main class="main-content">
             <h2>Edit Account</h2>
             <section class="form-section">
-                <form method="POST" action="simple-form">
-                    <label>Search User</label>
-                    <input type="text" name="search" placeholder="Enter username">
-                    <hr>
+                <form method="POST">
                     <label>First Name*</label>
                     <input type="text" name="first_name" value={{user.first_name}} required>
 
@@ -40,22 +36,33 @@
                     <label>Email*</label>
                     <input type="text" name="email" value={{user.email}} required>
 
+                    <label>Phone</label>
+                    <input type="text" name="phone_number" value="{{user.phone_number}}" required>
+
+                    <label>Username*</label>
+                    <input type="text" name="username" value="{{user.username}}" required>
+
+                    <label>Password*</label>
+                    <input type="text" name="password" value="{{user.password_hash}}">
+
                     <label>Role*</label>
-                    <select name="role" required>
-                        <option value="employee" {%if user.role=='employee'%}selected{%endif%}>Employee</option>
-                        <option value="manager" {%if user.role=='manager'%}selected{%endif%}>Manager</option>
-                        <option value="admin" {%if user.role=='admin'%}selected{%endif%}>Admin</option>
+                    <select name="role_id" required>
+                        {% for role in roles %}
+                            <option value="{{ role.id }}"
+                                {% if user.role_id == role.id %}selected{% endif %}>
+                                {{ role.name }}
+                            </option>
+                        {% endfor %}
                     </select>
 
                     <label>Status*</label>
-                    <select name="status" required>
-                        <option value="">Select Status</option>
-                        <option value="active" {%if user.status=='active'%}selected{%endif%}>Active</option>
-                        <option value="inactive" {%if user.status=='inactive'%}selected{%endif%}>Inactive</option>
+                    <select name="is_active" required>
+                        <option value="1" {% if user.is_active %}selected{% endif %}>Active</option>
+                        <option value="0" {% if not user.is_active %}selected{% endif %}>Inactive</option>
                     </select>
                     <div class="form-buttons">
                         <button class="primary-button">Save</button>
-                        <button type="reset" class="secondary-button">Reset</button>
+                        <a href="{{ url_for('admin.view_accounts') }}" class="secondary-button">Cancel</a>
                     </div>
                 </form>
             </section>
