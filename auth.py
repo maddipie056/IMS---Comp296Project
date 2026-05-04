@@ -15,6 +15,11 @@ def login():
 
         user = Staff.query.filter_by(username=username).first()
 
+        if not user.is_active:
+            msg = "This account is deactivated. Contact an admin"
+            return render_template('index.html', msg=msg)
+
+
         if user and check_password_hash(user.password_hash, password):
             session['loggedin'] = True
             session['staff_id'] = user.staff_id
