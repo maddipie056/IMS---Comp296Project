@@ -16,7 +16,6 @@
             <nav class = "menu">
                 <a href="{{url_for('admin.dashboard')}}" class="active">Dashboard</a>
                 <a href="{{url_for('admin.view_accounts')}}">Accounts</a>
-                <a href="{{url_for('admin.roles')}}">Role Management</a>
             </nav>
 
             <div class="logout-section">
@@ -50,29 +49,30 @@
                 <div class="quick-actions">
                     <a href="{{url_for('admin.create_account')}}" class="primary-button">Create Account</a>
                     <a href="{{url_for('admin.view_accounts')}}" class="secondary-button">View Accounts</a>
-                    <a href="{{url_for('admin.roles')}}" class="secondary-button">Manage Roles</a>
                 <div>
             <section>
             <section class="table-section">
                 <h2>Recent Activity</h2>
-                <table class="product-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for log in recent_logs%}
-                        <tr>
-                            <td>{{ log.username }}</td>
-                            <td>{{ log.action }}</td>
-                            <td>{{ log.date }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class = "recent-activity-container">
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_logs%}
+                            <tr>
+                                <td>{{ log.staff_id }}</td>
+                                <td>{{ log.change_amount }}</td>
+                                <td>{{ log.adjustment_timestamp }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </section>
             
         </main>
