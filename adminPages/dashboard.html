@@ -58,6 +58,7 @@
                         <thead>
                             <tr>
                                 <th>User</th>
+                                <th>Item</th>
                                 <th>Action</th>
                                 <th>Date</th>
                             </tr>
@@ -66,6 +67,7 @@
                             {% for log in recent_logs%}
                             <tr>
                                 <td>{{ log.staff_id }}</td>
+                                <td>{{ log.item_id }}</td>
                                 <td>{{ log.change_amount }}</td>
                                 <td>{{ log.adjustment_timestamp }}</td>
                             </tr>
